@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado de Revisão – Física | 3º ano EM</title>
+<style>
+:root{--blue:#174a7e;--blue2:#eaf2fb;--ink:#17212b;--muted:#5c6874;--line:#d9e0e7;--green:#167447;--greenbg:#e8f5ee;--red:#b42318;--redbg:#fff0ef;--paper:#fff;--bg:#f3f6f9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Arial,Helvetica,sans-serif}
+header{background:var(--blue);color:#fff;padding:25px 18px}
+.wrap{max-width:920px;margin:auto;padding:0 16px}
+header h1{margin:0 0 5px;font-size:clamp(1.35rem,4vw,2rem)}
+header p{margin:0;opacity:.92}
+main{padding:22px 0 42px}
+.panel,.question{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px #1322380a}
+h2{margin:0 0 12px;color:var(--blue);font-size:1.25rem}
+label{display:block;font-weight:700;margin:12px 0 5px}
+input[type=text]{width:100%;padding:12px;border:1px solid #aeb9c4;border-radius:8px;font:inherit}
+button{border:0;border-radius:9px;padding:11px 17px;font:700 15px Arial;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#e8edf2;color:var(--ink)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:.92rem}
+.progress{height:9px;background:#e6ebf0;border-radius:20px;overflow:hidden;margin:12px 0 18px}
+.progress span{display:block;height:100%;width:0;background:#2d78b7;transition:width .2s}
+.qtitle{font-weight:700;color:var(--blue);margin-bottom:8px}
+.prompt{font-size:1.05rem;margin:0 0 14px}
+.options{display:grid;gap:9px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--line);border-radius:9px;cursor:pointer}
+.option:hover{background:#f7faff;border-color:#9bb9d5}
+.option input{margin-top:5px;accent-color:var(--blue)}
+.option.correct{border-color:var(--green);background:var(--greenbg)}
+.option.wrong{border-color:var(--red);background:var(--redbg)}
+.feedback{margin-top:14px;padding:13px;border-radius:9px;display:none}
+.feedback.good{display:block;background:var(--greenbg);color:#125c39}
+.feedback.bad{display:block;background:var(--redbg);color:#8f1d16}
+.controls{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:18px}
+.formula{font-size:1.18rem;text-align:center;font-weight:700;background:#f2f5f8;border-radius:8px;padding:10px;margin:12px 0}
+.diagram{margin:14px auto;max-width:650px;border:1px solid #e0e5ea;border-radius:9px;padding:8px;background:#fff}
+.diagram svg{display:block;width:100%;height:auto}
+.diagram text{font-family:Arial,sans-serif;fill:#111}
+.parttag{display:inline-block;background:var(--blue2);color:var(--blue);font-weight:700;padding:4px 9px;border-radius:20px;font-size:.82rem}
+.hidden{display:none!important}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin:16px 0}
+.result-card{background:#f4f7fa;border-radius:10px;padding:13px;text-align:center}
+.result-card strong{display:block;font-size:1.5rem;color:var(--blue)}
+small,.muted{color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:12px}
+@media(max-width:600px){.panel,.question{padding:15px}.controls button{flex:1}.prompt{font-size:1rem}}
+@media print{body{background:#fff}.controls,header{display:none}.panel,.question{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Simulado de Revisão – Física</h1><p>3º ano do Ensino Médio · Circuitos elétricos, associações de resistores, geradores e receptores</p></div></header>
+<main class="wrap">
+<section id="start" class="panel">
+<h2>Bem-vindo(a) ao simulado!</h2>
+<p>Este simulado contém 24 questões de múltipla escolha, organizadas em quatro partes. Cada questão apresenta cinco alternativas e apenas uma resposta correta.</p>
+<label for="student">Nome completo do(a) aluno(a)</label><input id="student" type="text" maxlength="120" required placeholder="Digite seu nome completo"><label for="classroom">Turma</label><input id="classroom" type="text" maxlength="60" required placeholder="Ex.: 3º A"><p class="muted">Seu nome, turma, início e resultado serão enviados à professora para acompanhamento. É necessário estar conectado à internet para registrar a participação.</p><p id="startError" role="alert" style="color:#b42318"></p>
+<p class="muted">A correção e os comentários serão apresentados após cada resposta. Ao final, você verá seu desempenho geral e por parte.</p>
+<button class="primary" id="begin">Começar simulado</button>
+</section>
+<section id="quiz" class="hidden">
+<div class="panel">
+<div class="topline"><span id="partLabel" class="parttag"></span><span id="counter"></span></div>
+<div class="progress"><span id="bar"></span></div>
+<div class="topline"><span id="studentLabel"></span><span id="scoreLive"></span></div>
+</div>
+<div class="question">
+<div class="qtitle" id="qtitle"></div>
+<p class="prompt" id="prompt"></p>
+<div id="formula" class="formula hidden"></div>
+<div id="diagram" class="diagram hidden"></div>
+<div id="options" class="options"></div>
+<div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+<div class="controls"><button class="secondary" id="prev">← Anterior</button><button class="primary" id="next" disabled>Próxima →</button></div>
+</div>
+</section>
+<section id="results" class="panel hidden">
+<h2>Resultado do simulado</h2><p id="resultName"></p>
+<div class="result-grid">
+<div class="result-card"><small>Acertos</small><strong id="totalCorrect">0/24</strong></div>
+<div class="result-card"><small>Aproveitamento</small><strong id="percent">0%</strong></div>
+<div class="result-card"><small>Questões respondidas</small><strong id="answered">0/24</strong></div>
+</div>
+<h2>Desempenho por parte</h2><div id="byPart"></div>
+<p id="closing"></p><p id="sendStatus" role="status" aria-live="polite" class="muted"></p>
+<div class="controls"><button class="secondary" onclick="window.print()">Imprimir resultado</button><button class="primary" id="restart">Refazer simulado</button></div>
+</section>
+</main>
+<footer>Material de revisão de Física · Simulado interativo</footer>
+<script>
+const svgSeries = `<svg viewBox="0 0 620 210" role="img" aria-label="Fonte de 12 volts, polo positivo na placa longa superior e negativo na placa curta inferior, em série com resistores de 2, 4 e 6 ohms">
+<g stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M70 90 V45 H120 M70 120 V165 H550 V45 H500"/>
+<path d="M45 90 H95 M55 120 H85"/>
+<path d="M120 45 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H260 M280 45 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H420 M440 45 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H500"/>
+<path d="M260 45 H280 M420 45 H440"/>
+</g><g font-size="16" fill="#111"><text x="99" y="104">+</text><text x="99" y="132">−</text><text x="127" y="24">R₁ = 2 Ω</text><text x="288" y="24">R₂ = 4 Ω</text><text x="446" y="24">R₃ = 6 Ω</text><text x="95" y="190">Fonte: 12 V</text><text x="300" y="190">Associação em série</text></g></svg>`;
+const svgParallel = `<svg viewBox="0 0 620 225" role="img" aria-label="Fonte de 12 volts, placa longa positiva e placa curta negativa, alimentando resistores de 6 e 3 ohms em paralelo">
+<g stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M75 95 V45 H220 M75 125 V185 H220 M50 95 H100 M60 125 H90"/>
+<path d="M220 45 H280 M380 45 H460 V185 H220 M220 45 V110 H280 M380 110 H460"/>
+<path d="M280 45 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H380 M280 110 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H380"/>
+</g><g font-size="16" fill="#111"><text x="107" y="108">+</text><text x="107" y="138">−</text><text x="290" y="24">R₁ = 6 Ω</text><text x="290" y="91">R₂ = 3 Ω</text><text x="100" y="210">Fonte: 12 V</text><text x="485" y="116">Paralelo</text></g></svg>`;
+const svgCar = `<svg viewBox="0 0 620 245" role="img" aria-label="Fonte com placa positiva longa superior e placa negativa curta inferior alimentando dois faróis e painel em ramos paralelos">
+<g stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M70 95 V35 H190 M70 125 V215 H190 M45 95 H95 M55 125 H85"/>
+<path d="M190 35 H245 M345 35 H480 V215 H190 M190 35 V105 H245 M345 105 H480 M190 105 V175 H245 M345 175 H480"/>
+<path d="M245 35 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H345 M245 105 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H345 M245 175 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H345"/>
+</g><g font-size="15" fill="#111"><text x="103" y="108">+</text><text x="103" y="139">−</text><text x="265" y="17">Farol 1</text><text x="265" y="88">Farol 2</text><text x="265" y="158">Painel</text><text x="85" y="187">Bateria</text><text x="355" y="238">Ramos independentes</text></g></svg>`;
+const svgHome = `<svg viewBox="0 0 620 220" role="img" aria-label="Fonte com placa positiva longa superior e negativa curta inferior, alimentando três lâmpadas em paralelo">
+<g stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M75 95 V40 H510 V180 H75 V125 M50 95 H100 M60 125 H90"/>
+<path d="M205 40 V88 M205 124 V180 M325 40 V88 M325 124 V180 M445 40 V88 M445 124 V180"/>
+<circle cx="205" cy="106" r="18"/><circle cx="325" cy="106" r="18"/><circle cx="445" cy="106" r="18"/>
+<path d="M193 94 L217 118 M217 94 L193 118 M313 94 L337 118 M337 94 L313 118 M433 94 L457 118 M457 94 L433 118"/>
+</g><g font-size="15" fill="#111"><text x="105" y="108">+</text><text x="105" y="138">−</text><text x="172" y="25">Lâmpada 1</text><text x="292" y="25">Lâmpada 2</text><text x="412" y="25">Lâmpada 3</text><text x="95" y="165">Fonte</text><text x="250" y="207">Associação em paralelo</text></g></svg>`;
+const svgBreaker = `<svg viewBox="0 0 620 195" role="img" aria-label="Fonte com placa positiva longa superior e negativa curta inferior em série com disjuntor e resistor de carga">
+<g stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M75 95 V40 H165 M75 125 V160 H535 V40 H455 M50 95 H100 M60 125 H90"/>
+<path d="M165 40 H215 M215 40 L260 15 M260 40 H355 M355 40 l10 -10 12 20 12 -20 12 20 12 -20 10 10 H455"/>
+</g><g font-size="15" fill="#111"><text x="106" y="107">+</text><text x="106" y="138">−</text><text x="170" y="80">Disjuntor</text><text x="370" y="20">Carga</text><text x="95" y="182">Fonte</text><text x="230" y="92">Contato</text></g></svg>`;
+const Q = [
+{part:1,title:"Questão 1 – Lei de Ohm",text:"Na expressão U = R · i, que representa a Lei de Ohm, cada letra corresponde a uma grandeza física. Assinale a alternativa que apresenta corretamente essas grandezas e suas unidades de medida.",formula:"U = R · i",opts:["U = corrente (A); R = tensão (V); i = resistência (Ω).","U = tensão (V); R = resistência (Ω); i = corrente elétrica (A).","U = potência (W); R = resistência (Ω); i = corrente elétrica (A).","U = tensão (V); R = potência (W); i = corrente elétrica (A).","U = energia (J); R = resistência (Ω); i = carga elétrica (C)."],a:1,why:"U representa tensão elétrica, medida em volts (V); R representa resistência elétrica, medida em ohms (Ω); i representa corrente elétrica, medida em ampères (A)."},
+{part:1,title:"Questão 2 – Grandezas e unidades",text:"As grandezas elétricas podem ser identificadas por símbolos e unidades específicas. Assinale a alternativa que apresenta a correspondência correta entre grandeza física e unidade de medida.",opts:["Corrente elétrica – Volt (V); Tensão – Ampère (A); Resistência – Watt (W); Potência – Ohm (Ω).","Corrente elétrica – Ohm (Ω); Tensão – Watt (W); Resistência – Volt (V); Potência – Ampère (A).","Corrente elétrica – Ampère (A); Tensão – Volt (V); Resistência – Ohm (Ω); Potência – Watt (W).","Corrente elétrica – Watt (W); Tensão – Ohm (Ω); Resistência – Ampère (A); Potência – Volt (V).","Corrente elétrica – Coulomb (C); Tensão – Joule (J); Resistência – Watt (W); Potência – Volt (V)."],a:2,why:"Corrente elétrica é medida em ampères (A), tensão em volts (V), resistência em ohms (Ω) e potência em watts (W)."},
+{part:1,title:"Questão 3 – Símbolos das grandezas elétricas",text:"Em um circuito elétrico, a potência dissipada por um resistor pode ser calculada pela expressão P = U · i. Nessa expressão, o símbolo P representa:",formula:"P = U · i",opts:["A resistência elétrica, medida em ohms (Ω).","A carga elétrica, medida em coulombs (C).","A corrente elétrica, medida em ampères (A).","A potência elétrica, medida em watts (W).","A energia elétrica, medida em joules (J)."],a:3,why:"P representa potência elétrica. Ela indica a rapidez com que a energia é transformada ou transferida. Sua unidade é o watt (W)."},
+{part:1,title:"Questão 4 – Potência elétrica",text:"Um estudante deseja calcular a potência elétrica de um aparelho conhecendo a tensão elétrica aplicada e a corrente que o atravessa. Qual expressão matemática deve utilizar?",opts:["P = U · i","P = U / i","P = R · i","P = U + i","P = R / U"],a:0,why:"A potência elétrica pode ser calculada por P = U · i, em que P é medida em watts, U em volts e i em ampères."},
+{part:1,title:"Questão 5 – Geradores e receptores",text:"No estudo dos geradores e receptores elétricos, são utilizados os símbolos E, E' e r. Assinale a alternativa que identifica corretamente essas grandezas.",opts:["E: energia dissipada; E': corrente elétrica; r: potência elétrica.","E: força eletromotriz do gerador; E': força contraeletromotriz do receptor; r: resistência interna.","E: tensão nos terminais; E': resistência externa; r: corrente elétrica.","E: resistência interna; E': força eletromotriz; r: tensão elétrica.","E: potência do gerador; E': potência do receptor; r: carga elétrica."],a:1,why:"E representa a força eletromotriz (f.e.m.) do gerador; E' representa a força contraeletromotriz (f.c.e.m.) do receptor; r representa a resistência interna. E e E' são medidas em volts, e r em ohms."},
+{part:1,title:"Questão 6 – Unidades de medida",text:"Um circuito elétrico apresenta uma tensão de 24 V, uma resistência de 8 Ω e uma corrente de 3 A. As unidades V, Ω e A representam, respectivamente:",opts:["Potência, corrente elétrica e resistência elétrica.","Resistência elétrica, tensão elétrica e potência.","Tensão elétrica, resistência elétrica e corrente elétrica.","Corrente elétrica, potência e tensão elétrica.","Energia elétrica, resistência elétrica e carga elétrica."],a:2,why:"Volt (V) é a unidade de tensão elétrica; ohm (Ω), de resistência elétrica; e ampère (A), de corrente elétrica."},
+{part:2,title:"Questão 7 – Corrente elétrica",text:"A corrente elétrica está presente no funcionamento de diversos aparelhos e circuitos. Sobre esse fenômeno, assinale a alternativa correta.",opts:["É o movimento desordenado de prótons no interior de um condutor.","É o movimento ordenado de cargas elétricas devido à ação de um campo elétrico.","É a capacidade que um material possui de armazenar energia elétrica.","É a oposição oferecida por um material à passagem de cargas elétricas.","É a transformação de energia elétrica exclusivamente em energia térmica."],a:1,why:"Corrente elétrica é o movimento ordenado de cargas elétricas. Em condutores metálicos, os portadores móveis são elétrons; o sentido convencional da corrente é oposto ao movimento médio dos elétrons."},
+{part:2,title:"Questão 8 – Circuitos elétricos",text:"Um circuito elétrico pode apresentar diferentes condições de funcionamento. Quando dizemos que um circuito está aberto, significa que:",opts:["A corrente elétrica circula normalmente por todos os componentes.","A resistência elétrica do circuito é necessariamente igual a zero.","Existe uma interrupção no caminho condutor, impedindo a circulação da corrente elétrica.","A tensão elétrica da fonte se torna igual a zero.","Todos os componentes estão ligados em paralelo."],a:2,why:"Em um circuito aberto, há uma interrupção no caminho condutor. No modelo ideal, não circula corrente pelo ramo interrompido."},
+{part:2,title:"Questão 9 – Associação de resistores",text:"As associações de resistores podem ser classificadas em série e paralelo. Assinale a alternativa que apresenta corretamente uma característica de cada associação.",opts:["Na associação em série, a tensão é igual em todos os resistores; na associação em paralelo, a corrente é igual em todos.","Na associação em série, a corrente elétrica é a mesma em todos os resistores; na associação em paralelo, a tensão elétrica é a mesma em todos.","Na associação em série, a resistência equivalente é sempre menor que qualquer resistência individual.","Na associação em paralelo, a corrente elétrica é obrigatoriamente igual a zero em todos os resistores.","Nas duas associações, a corrente e a tensão são sempre iguais em todos os resistores."],a:1,why:"Em uma associação em série, a corrente é a mesma em todos os componentes. Em paralelo, os componentes estão submetidos à mesma diferença de potencial."},
+{part:2,title:"Questão 10 – Curto-circuito",text:"O curto-circuito é uma situação que pode provocar danos aos componentes de uma instalação elétrica. Ele ocorre, geralmente, quando:",opts:["Um resistor é conectado em série com uma lâmpada.","A corrente elétrica diminui gradualmente em um circuito.","Dois pontos com potenciais elétricos diferentes são ligados por um caminho de resistência muito baixa, provocando uma corrente elevada.","Um interruptor interrompe a passagem da corrente elétrica.","Uma lâmpada é substituída por outra de maior potência, mantendo-se a mesma tensão."],a:2,why:"Um curto-circuito cria um caminho de resistência muito baixa entre pontos de potenciais diferentes, podendo provocar corrente muito elevada."},
+{part:2,title:"Questão 11 – Geradores e receptores elétricos",text:"Geradores e receptores desempenham funções diferentes nos circuitos elétricos. Assinale a alternativa que apresenta corretamente essa diferença.",opts:["O gerador transforma energia elétrica em energia química, enquanto o receptor transforma energia química em elétrica.","O gerador fornece energia elétrica ao circuito, enquanto o receptor recebe energia elétrica e a transforma em outras formas de energia.","O gerador e o receptor possuem exatamente a mesma função, diferenciando-se apenas pelo tamanho.","O receptor fornece energia elétrica ao circuito, enquanto o gerador apenas limita a corrente elétrica.","Ambos transformam exclusivamente energia elétrica em energia térmica."],a:1,why:"O gerador converte outra forma de energia em energia elétrica. O receptor recebe energia elétrica e a converte em outras formas, como mecânica, química ou térmica."},
+{part:2,title:"Questão 12 – Resistência equivalente",text:"A resistência equivalente de uma associação de resistores representa:",opts:["A soma das correntes elétricas que atravessam os resistores.","A tensão elétrica total fornecida pela fonte.","A resistência de um único resistor que poderia substituir toda a associação, produzindo o mesmo comportamento elétrico visto pelos terminais.","A potência elétrica total dissipada exclusivamente pelo primeiro resistor.","A resistência interna da fonte de alimentação."],a:2,why:"A resistência equivalente é a resistência de um único resistor que, conectado aos mesmos terminais, apresenta a mesma relação entre tensão e corrente que toda a associação."},
+{part:3,title:"Questão 13 – Lei de Ohm",text:"Um resistor é ligado a uma fonte de tensão de 12 V. Sabendo que sua resistência elétrica é de 4 Ω, determine a intensidade da corrente elétrica que o atravessa.",formula:"U = R · i   ⇒   i = U / R",opts:["2 A","3 A","4 A","8 A","48 A"],a:1,why:"i = U/R = 12/4 = 3 A."},
+{part:3,title:"Questão 14 – Associação de resistores em série",text:"Três resistores de resistências R₁ = 2 Ω, R₂ = 4 Ω e R₃ = 6 Ω são associados em série e ligados a uma bateria de 12 V. Determine a resistência equivalente e a corrente elétrica total do circuito.",diagram:svgSeries,formula:"Rₑq = R₁ + R₂ + R₃   |   i = U / Rₑq",opts:["6 Ω e 2 A.","10 Ω e 1,2 A.","12 Ω e 1 A.","12 Ω e 2 A.","24 Ω e 0,5 A."],a:2,why:"Em série: Rₑq = 2 + 4 + 6 = 12 Ω. Pela Lei de Ohm, i = 12/12 = 1 A. O diagrama utiliza exatamente os valores do enunciado."},
+{part:3,title:"Questão 15 – Associação de resistores em paralelo",text:"Dois resistores, R₁ = 6 Ω e R₂ = 3 Ω, são associados em paralelo e ligados a uma fonte de tensão de 12 V. Determine a resistência equivalente da associação e a corrente elétrica total fornecida pela fonte.",diagram:svgParallel,formula:"1/Rₑq = 1/R₁ + 1/R₂   |   i = U / Rₑq",opts:["9 Ω e 1,33 A.","4 Ω e 3 A.","3 Ω e 4 A.","2 Ω e 6 A.","18 Ω e 0,67 A."],a:3,why:"1/Rₑq = 1/6 + 1/3 = 3/6, portanto Rₑq = 2 Ω. A corrente total é i = 12/2 = 6 A. O diagrama utiliza exatamente os valores do enunciado."},
+{part:3,title:"Questão 16 – Potência elétrica",text:"Um aparelho elétrico está submetido a uma tensão de 12 V e é percorrido por uma corrente elétrica de 2 A. Qual é a potência elétrica desenvolvida pelo aparelho?",formula:"P = U · i",opts:["6 W.","10 W.","14 W.","24 W.","48 W."],a:3,why:"P = U · i = 12 × 2 = 24 W."},
+{part:3,title:"Questão 17 – Gerador elétrico",text:"Um gerador apresenta força eletromotriz (E) de 12 V e resistência interna (r) de 1 Ω. Quando conectado a um circuito, fornece uma corrente elétrica de 2 A. Determine a tensão elétrica nos terminais do gerador.",formula:"U = E − r · i",opts:["6 V.","8 V.","10 V.","12 V.","14 V."],a:2,why:"U = 12 − 1 × 2 = 10 V. A tensão nos terminais do gerador que fornece corrente é menor que sua força eletromotriz devido à queda interna."},
+{part:3,title:"Questão 18 – Receptor elétrico",text:"Um receptor elétrico apresenta força contraeletromotriz (E') de 4 V e resistência interna (r) de 1 Ω. Sabendo que ele é percorrido por uma corrente elétrica de 2 A, determine a tensão elétrica aplicada aos seus terminais.",formula:"U = E' + r · i",opts:["2 V.","4 V.","5 V.","6 V.","8 V."],a:3,why:"U = 4 + 1 × 2 = 6 V."},
+{part:4,title:"Questão 19 – Sistema elétrico de um automóvel",text:"Durante uma viagem noturna, um dos faróis de um automóvel queima. O motorista percebe que o outro farol continua funcionando e que as luzes do painel permanecem acesas normalmente. Considerando a organização usual dos circuitos elétricos de automóveis, assinale a alternativa correta.",diagram:svgCar,opts:["Os faróis estão associados em série, mas o painel possui uma bateria independente.","Os faróis estão associados em paralelo, permitindo que um continue funcionando quando o outro queima. O painel possui seu próprio circuito de alimentação.","Os faróis estão associados em série, e a queima de um deles deveria apagar também o painel.","Todos os componentes estão associados em série, mas a corrente elétrica consegue desviar automaticamente da lâmpada queimada.","Os faróis estão associados em paralelo, mas a queima de um deles interrompe a corrente elétrica em todo o automóvel."],a:1,why:"Os faróis normalmente são alimentados por ramificações independentes, de modo que a interrupção de um ramo não interrompe o outro. A iluminação do painel também tem circuito próprio."},
+{part:4,title:"Questão 20 – Instalação elétrica residencial",text:"Em uma residência, as lâmpadas dos diferentes cômodos podem ser ligadas e desligadas independentemente. Quando uma lâmpada queima, as demais continuam funcionando normalmente. Essa característica é possível porque as lâmpadas são geralmente instaladas em:",diagram:svgHome,opts:["Associação em série, pois a corrente elétrica se divide entre as lâmpadas.","Associação em série, pois cada lâmpada recebe uma tensão diferente.","Associação em paralelo, pois cada lâmpada possui um caminho independente para a corrente elétrica e recebe a mesma tensão da rede.","Associação mista, pois todas as lâmpadas precisam funcionar simultaneamente.","Associação em paralelo, pois a corrente elétrica é necessariamente igual em todas as lâmpadas, independentemente de suas potências."],a:2,why:"Na associação em paralelo, cada lâmpada fica ligada aos mesmos dois nós da rede e recebe a mesma tensão. A interrupção de um ramo não interrompe os demais."},
+{part:4,title:"Questão 21 – Chuveiro elétrico",text:"Um chuveiro elétrico possui uma chave que permite selecionar as posições verão e inverno. Na posição inverno, a água sai mais quente porque o aquecimento elétrico é maior. Considerando que a tensão elétrica da rede permanece constante e que a mudança de temperatura é obtida pela alteração da resistência do circuito de aquecimento, assinale a alternativa correta.",opts:["Na posição inverno, a resistência elétrica é maior e a potência dissipada também é maior.","Na posição inverno, a resistência elétrica é menor, aumentando a corrente elétrica e a potência dissipada.","Na posição inverno, a corrente elétrica diminui e a potência dissipada aumenta.","Na posição verão, a resistência elétrica é menor e a potência dissipada é maior.","A temperatura da água aumenta porque a tensão elétrica da rede necessariamente dobra na posição inverno."],a:1,why:"Com tensão constante, P = U²/R. A menor resistência na posição inverno produz maior potência dissipada e maior corrente elétrica."},
+{part:4,title:"Questão 22 – Recarga da bateria de um celular",text:"Quando um celular é conectado ao carregador, ocorre a transferência de energia elétrica para sua bateria, que armazena energia por meio de processos químicos. Durante esse processo de recarga, a bateria do celular funciona como:",opts:["Um gerador elétrico, transformando energia química em energia elétrica.","Um resistor ôhmico, transformando toda a energia elétrica em calor.","Um receptor elétrico, transformando energia elétrica em energia química.","Um interruptor, controlando a passagem da corrente elétrica.","Um condutor ideal, sem realizar transformação de energia."],a:2,why:"Durante a recarga, a bateria recebe energia elétrica e a armazena como energia química. Portanto, atua como receptor elétrico."},
+{part:4,title:"Questão 23 – Funcionamento de um ventilador",text:"Um ventilador ligado à tomada utiliza um motor elétrico para movimentar suas hélices. Durante seu funcionamento, o motor recebe energia elétrica e a transforma principalmente em energia mecânica, além de produzir aquecimento. Nesse contexto, o motor elétrico funciona como:",opts:["Gerador elétrico, pois transforma energia mecânica em elétrica.","Receptor elétrico, pois transforma energia elétrica em energia mecânica e térmica.","Gerador elétrico, pois transforma energia térmica em mecânica.","Resistor puro, pois transforma toda a energia elétrica exclusivamente em calor.","Fonte de tensão, pois fornece energia elétrica à tomada."],a:1,why:"O motor recebe energia elétrica e a converte principalmente em energia mecânica, com parte dissipada como calor. Por isso, é um receptor elétrico."},
+{part:4,title:"Questão 24 – Dispositivo de proteção elétrica",text:"Em uma instalação residencial, o disjuntor é um dispositivo de segurança que interrompe automaticamente a passagem da corrente elétrica quando ocorre uma situação de sobrecorrente, como em determinados casos de sobrecarga ou curto-circuito. A principal função desse dispositivo é:",diagram:svgBreaker,opts:["Aumentar a tensão elétrica fornecida aos aparelhos.","Diminuir a resistência elétrica dos circuitos.","Armazenar energia elétrica para utilização posterior.","Interromper o circuito quando a corrente ultrapassa limites seguros, protegendo a instalação e seus componentes.","Manter a corrente elétrica constante, independentemente da quantidade de aparelhos ligados."],a:3,why:"O disjuntor abre o circuito quando detecta uma corrente acima de seu limite de atuação, ajudando a proteger os condutores e a instalação contra sobrecorrentes."}
+];
+const partNames={1:"Parte I – Linguagem da eletricidade",2:"Parte II – Conceitos e definições",3:"Parte III – A teoria na resolução de problemas",4:"Parte IV – A Física no cotidiano"};
+const REGISTRO_URL="https://script.google.com/macros/s/AKfycbxG7RUoJZIyG45GTe5WqojHwo9Bpea2HJtHH0MeJ8a4Lx6SORdqcdYn81wFOl87h1BA/exec";
+let index=0,answers={},locked={},tentativa="",registroInicioEnviado=false,registroFimEnviado=false;
+function novoId(){return (typeof crypto!=="undefined" && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36)+"-"+Math.random().toString(36).slice(2);}
+function registrar(evento,acertos){
+ const dados={nome:$("student").value.trim(),turma:$("classroom").value.trim(),tentativa,evento};
+ if(evento==="conclusao"){dados.acertos=acertos;dados.total=24;}
+ // O Apps Script aceita JSON no corpo. no-cors evita bloqueio de leitura da resposta,
+ // mas impede confirmar se o servidor efetivamente gravou o registro.
+ return fetch(REGISTRO_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(dados),keepalive:true});
+}
+const $=id=>document.getElementById(id);
+function start(){
+ const nome=$("student").value.trim(),turma=$("classroom").value.trim();
+ if(!nome||!turma){$("startError").textContent="Informe seu nome completo e sua turma para começar.";return;}
+ $("startError").textContent="";tentativa=novoId();registroInicioEnviado=true;registroFimEnviado=false;
+ $("start").classList.add("hidden");$("quiz").classList.remove("hidden");$("studentLabel").textContent=nome+" — "+turma;render();
+ registrar("inicio").catch(()=>{registroInicioEnviado=false;});
+}
+function render(){
+ const q=Q[index],chosen=answers[index];
+ $("partLabel").textContent=partNames[q.part];$("counter").textContent=`Questão ${index+1} de ${Q.length}`;
+ $("bar").style.width=((index+1)/Q.length*100)+"%";$("qtitle").textContent=q.title;$("prompt").textContent=q.text;
+ $("formula").textContent=q.formula||"";$("formula").classList.toggle("hidden",!q.formula);
+ $("diagram").innerHTML=q.diagram||"";$("diagram").classList.toggle("hidden",!q.diagram);
+ $("options").innerHTML="";
+ q.opts.forEach((opt,i)=>{
+  const lab=document.createElement("label");lab.className="option";
+  if(locked[index]&&i===q.a)lab.classList.add("correct");
+  if(locked[index]&&chosen===i&&i!==q.a)lab.classList.add("wrong");
+  const radio=document.createElement("input");radio.type="radio";radio.name="answer";radio.value=i;radio.checked=chosen===i;radio.disabled=!!locked[index];
+  radio.addEventListener("change",()=>select(i));
+  const span=document.createElement("span");span.textContent=String.fromCharCode(65+i)+") "+opt;
+  lab.append(radio,span);$("options").append(lab);
+ });
+ const fb=$("feedback");fb.className="feedback";
+ if(locked[index]){const ok=chosen===q.a;fb.classList.add(ok?"good":"bad");fb.innerHTML=`<strong>${ok?"Muito bem! Resposta correta.":"Resposta incorreta."}</strong> ${ok?"":`A alternativa correta é ${String.fromCharCode(65+q.a)}. `}${q.why}`;}
+ $("prev").disabled=index===0;$("next").disabled=!locked[index];$("next").textContent=index===Q.length-1?"Ver resultado":"Próxima →";
+ const correct=Q.reduce((s,item,i)=>s+(locked[i]&&answers[i]===item.a?1:0),0);$("scoreLive").textContent=`Acertos: ${correct}`;
+}
+function select(i){if(locked[index])return;answers[index]=i;locked[index]=true;render();}
+function next(){if(index<Q.length-1){index++;render()}else showResults();}
+function showResults(){
+ $("quiz").classList.add("hidden");$("results").classList.remove("hidden");
+ const total=Q.reduce((s,q,i)=>s+(locked[i]&&answers[i]===q.a?1:0),0);
+ const answered=Object.keys(answers).length;
+ $("resultName").textContent="Aluno(a): "+($("student").value.trim()||"Não identificado");
+ $("totalCorrect").textContent=`${total}/24`;$("percent").textContent=Math.round(total/24*100)+"%";$("answered").textContent=`${answered}/24`;
+ $("byPart").innerHTML="";
+ for(let p=1;p<=4;p++){const qs=Q.map((q,i)=>({q,i})).filter(x=>x.q.part===p);const n=qs.filter(x=>locked[x.i]&&answers[x.i]===x.q.a).length;const d=document.createElement("p");d.innerHTML=`<strong>${partNames[p]}:</strong> ${n}/6 acertos`; $("byPart").append(d);}
+ if(!registroFimEnviado){
+  registroFimEnviado=true;
+  $("sendStatus").textContent="Enviando registro de conclusão…";
+  registrar("conclusao",total).then(()=>{$("sendStatus").textContent="Envio solicitado. Consulte a planilha para confirmar o registro.";}).catch(()=>{$("sendStatus").textContent="Não foi possível enviar o registro. Verifique a conexão e informe à professora.";registroFimEnviado=false;});
+ }
+ $("closing").textContent=total>=20?"Excelente desempenho!":total>=15?"Bom trabalho! Revise os conteúdos das questões em que houve dificuldade.":total>=10?"Você está avançando. Retome os conceitos e refaça o simulado para consolidar a aprendizagem.":"Use os comentários das questões para revisar os conteúdos e tente novamente.";
+}
+function restart(){index=0;answers={};locked={};tentativa="";registroInicioEnviado=false;registroFimEnviado=false;$("sendStatus").textContent="";$("results").classList.add("hidden");$("start").classList.remove("hidden");$("student").value="";}
+$("begin").addEventListener("click",start);$("next").addEventListener("click",next);$("prev").addEventListener("click",()=>{if(index>0){index--;render()}});$("restart").addEventListener("click",restart);
+</script>
+</body>
+</html>
